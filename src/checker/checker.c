@@ -64,6 +64,30 @@ void	get_op(t_list **stk_a, t_list *stk_b)
 	}
 }
 
+void	check_lstdup(t_list *stk_a)
+{
+	t_list	*temp;
+
+	if (!stk_a)
+		return ;
+	temp = stk_a;
+	while (temp)
+	{
+		stk_a = temp->next;
+		while (stk_a)
+		{
+			if (stk_a->content->nbr == temp->content->nbr)
+			{
+				free (stk_a);
+				write (1, "Error\n", ft_strlen("Error\n"));
+				exit(EXIT_FAILURE);
+			}
+			stk_a = stk_a->next;
+		}
+		temp = temp->next;
+	}
+}
+
 int	main(int ac, char **av)
 {
 	t_list	*stk_a;
@@ -73,6 +97,7 @@ int	main(int ac, char **av)
 		return (0);
 	inputcheck(av);
 	stk_a = get_av(ac, av);
+	check_lstdup(stk_a);
 	stk_b = NULL;
 	get_op(&stk_a, stk_b);
 	ft_stkclear(&stk_a, &destroy);
