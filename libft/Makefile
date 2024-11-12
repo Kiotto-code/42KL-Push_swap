@@ -9,7 +9,8 @@ INCLUDES	= ./includes
 SRC_PATH	= ./src
 OBJ_PATH	= ./obj
 
-SRCS	= $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*/*,.c*)))
+SRCS	= $(wildcard $(SRC_PATH)/libft/*.c)
+# SRCS	= $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*/*,.c*)))
 OBJS	= $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRCS)))))
 
 all:		$(NAME)
@@ -19,6 +20,8 @@ $(NAME):	$(OBJ_PATH) $(OBJS)
 
 $(OBJ_PATH)/%.o:	$(SRC_PATH)/*/%.c*
 					$(CC) $(CFLAGS) -c -I$(INCLUDES) $< -o $@
+
+
 
 $(OBJ_PATH):
 				mkdir -p $(OBJ_PATH)

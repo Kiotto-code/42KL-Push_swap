@@ -9,25 +9,43 @@ INCLUDES	= ./includes
 SRC_PATH	= ./src
 OBJ_PATH	= ./obj
 
-PUSHSWAP_SRCS	= $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/$(NAME)/*,.c*)))
-CHECKER_SRCS	= $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/$(CHECKER)/*,.c*)))
+# OBJS = $(SRCS:.c=.o)
+
+# PUSHSWAP_SRCS	= $(wildcard $(SRC_PATH)/$(NAME)/*.c)
+# CHECKER_SRCS	= $(wildcard $(SRC_PATH)/$(CHECKER)/*.c)
+# PUSHSWAP_OBJS	= ${PUSHSWAP_SRCS:.c=.o}
+# CHECKER_OBJS	= ${CHECKER_SRCS:.c=.o}
+
+# --------------------------------------------------------------
+# PUSHSWAP_SRCS	= $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/$(NAME)/*,.c*)))
+# CHECKER_SRCS	= $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/$(CHECKER)/*,.c*)))
+
+PUSHSWAP_SRCS	= $(wildcard $(SRC_PATH)/$(NAME)/*.c)
+CHECKER_SRCS	= $(wildcard $(SRC_PATH)/$(CHECKER)/*.c)
 
 PUSHSWAP_OBJS	= $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(PUSHSWAP_SRCS)))))
 CHECKER_OBJS	= $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(CHECKER_SRCS)))))
 
-all:	$(NAME) bonus
+#####REQUIRED THIS:#####
+# $(OBJ_PATH)/%.o:	$(SRC_PATH)/**/%.c* | $(OBJ_PATH)
+# 					$(CC) $(CFLAGS) -c -I$(INCLUDES) $< -o $@
+
+# --------------------------------------------------------------
+
+all:	$(OBJ_PATH) $(NAME) bonus
 
 bonus:	$(CHECKER)
 
 $(NAME):	$(PUSHSWAP_OBJS)
 			$(MAKE) -C $(LIBFT)
-			$(CC) $(CFLAGS) $^ -L$(LIBFT) -lft -o $@
+			$(CC) $(CFLAGS) $? -L$(LIBFT) -lft -o $@
+
 
 $(CHECKER):		$(CHECKER_OBJS)
 				$(MAKE) -C $(LIBFT)
 				$(CC) $(CFLAGS) $^ -L$(LIBFT) -lft -o $@
 
-$(OBJ_PATH)/%.o:	$(SRC_PATH)/*/%.c* | $(OBJ_PATH)
+$(OBJ_PATH)/%.o:	$(SRC_PATH)/**/%.c* | $(OBJ_PATH)
 					$(CC) $(CFLAGS) -c -I$(INCLUDES) $< -o $@
 
 $(OBJ_PATH):
